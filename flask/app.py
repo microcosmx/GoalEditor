@@ -3,7 +3,7 @@ import os
 from flask import Flask, make_response, request, session, render_template, send_from_directory, redirect 
 from werkzeug import secure_filename
 import json
-TREE_BASE_FILENAME = 'flare.json'
+TREE_BASE_FILENAME = 'goal.json'
 DATA_DIR = 'data'
 DATA_DIR_PATH = '../{}'.format(DATA_DIR)
 TREE_FILENAME = '{}/{}'.format(DATA_DIR_PATH, TREE_BASE_FILENAME)
@@ -27,7 +27,7 @@ def tree():
     if request.method == 'POST':
        content = request.data
        with open(TREE_FILENAME, 'w') as tree_file:
-           tree_file.write(content)
+           tree_file.write(content.decode())
        return "saved."
     else:
        with open(TREE_FILENAME, 'r') as tree_file:
@@ -37,7 +37,7 @@ def tree():
 @app.route('/tree/file', methods=['GET', 'POST'])
 def download_tree_file():
     if request.method == 'POST':
-        file = request.files['flare.json']
+        file = request.files['goal.json']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], TREE_FILENAME))
